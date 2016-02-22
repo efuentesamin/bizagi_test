@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  VacationsApproval
+
+  Created by Edwin Fuentes Amin on 2/21/16.
+  Copyright © 2016 efuentesamin. All rights reserved.
+*/
+
+
+"OK_LABEL" = "Aceptar";
+"JSON_PARSE_ERROR" = "Error en el formato de la información.";
+"REQUEST_ERROR" = "Error al descargar la información.";
+

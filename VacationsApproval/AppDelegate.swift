@@ -12,10 +12,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	var navigationController: UINavigationController!
 
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
+		self.navigationController = application.windows[0].rootViewController as! UINavigationController
 		return true
 	}
 
@@ -35,10 +37,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationDidBecomeActive(application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+		self.loadTasks()
 	}
 
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+	}
+	
+	
+	func loadTasks() {
+		//Url for GET request
+		let URL: NSString = "https://sheetsu.com/apis/v1.0/3c53eef9"
+		
+		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+		HTTPClient.request(URL, method: "GET", body: "", callback: {
+			(resultObject: AnyObject?, error: Bool, errorMessage: NSString) -> Void in
+			
+			UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+			
+			if error == false {
+				//There is no error. Process data
+				taskManager.tasks = [Task]()
+				for item in resultObject as! NSArray {
+					taskManager.addTask(Task(values: item as! NSDictionary))
+				}
+				
+				let mainViewController = self.navigationController.viewControllers[0] as! MainViewController
+				mainViewController.tasksTable.reloadData()
+			} else {
+				//There was an error. Show the corresponding message
+				let alertController = UIAlertController(title: "Error", message: errorMessage as String, preferredStyle: UIAlertControllerStyle.Alert)
+				alertController.addAction(UIAlertAction(title: NSLocalizedString("OK_LABEL", comment: ""), style: UIAlertActionStyle.Default, handler: nil))
+				self.navigationController.presentViewController(alertController, animated: true, completion: nil)
+			}
+		})
 	}
 
 
