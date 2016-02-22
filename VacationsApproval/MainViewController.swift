@@ -34,6 +34,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 	}
 	
 	
+	func trunc(string: String, length: Int, trailing: String? = "...") -> String {
+		if string.characters.count > length {
+			return string.substringToIndex(string.startIndex.advancedBy(length)) + (trailing ?? "")
+		} else {
+			return string
+		}
+	}
+	
+	
 	@IBAction func unwindToTasksList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? NewTaskViewController {
 			let task = sourceViewController.task
@@ -83,6 +92,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 		let nameLabel = cell.viewWithTag(1) as! UILabel
 		let notesLabel = cell.viewWithTag(3) as! UILabel
 		let approvedImage = cell.viewWithTag(4) as! UIImageView
+		let datesLabel = cell.viewWithTag(5) as! UILabel
 		
 		let task = taskManager.tasks[indexPath.row]
 		
@@ -103,6 +113,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 		} else {
 			approvedImage.image = UIImage(named: "unapproved.png")
 		}
+		datesLabel.text = String(format: "%@ - %@", trunc(task.initDate as String, length: 10, trailing: ""), trunc(task.endDate as String, length: 10, trailing: ""))
 		
 		return cell
 	}
