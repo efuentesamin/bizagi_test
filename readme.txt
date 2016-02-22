@@ -15,3 +15,7 @@ There you can see the update data.
 
 The app was developed using internationalization.
 
+As the app has no third-party librarys you can just clone the repo, open in xcode and run on simulator.
+
+
+
